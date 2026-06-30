@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fareeda Kalsoom — Thinking out loud</title>
+<meta name="description" content="A chemist by training, a thinker by habit. Essays on communication, philosophy, psychology, and challenging the stereotypes we live by.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F1E8; --paper-2:#FBFAF4;
+  --ink:#1E222B; --ink-soft:#454A56; --muted:#797E8A;
+  --line:#DAD5C6; --accent:#2E6F86; --accent-deep:#235567;
+  /* signature accent line — deep blue tonal gradient */
+  --litmus:linear-gradient(90deg,#16243B 0%,#234E6B 40%,#2E6F86 75%,#5E9DB0 100%);
+  --shadow:0 1px 2px rgba(30,34,43,.04),0 10px 34px rgba(30,34,43,.07);
+  --shadow-lg:0 24px 70px rgba(30,34,43,.18);
+  --r:14px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:92px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:"Inter",system-ui,sans-serif;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:980px;margin:0 auto;padding:0 24px}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--accent-deep)}
+/* spectrum rule */
+.spectrum{height:3px;border-radius:3px;background:var(--litmus)}
+/* ---------- header ---------- */
+header{
+  position:sticky;top:0;z-index:50;
+  background:rgba(244,241,232,.86);backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav{display:flex;align-items:center;justify-content:space-between;min-height:84px;padding:8px 0}
+.brand{display:flex;align-items:center;gap:7px;cursor:pointer;background:none;border:0;padding:0;font:inherit;color:inherit}
+.brand-el{cursor:pointer}
+.brand:hover .brand-el{transform:translateY(-4px) scale(1.1);background:var(--accent-deep);color:#fff;border-color:transparent;box-shadow:var(--shadow-lg);z-index:6}
+.brand:hover .brand-el .num,.brand:hover .brand-el .nm,.brand:hover .brand-el .mass{color:rgba(255,255,255,.88)}
+.brand:hover .brand-el .mass{opacity:1}
+.brand .mark{
+  font-family:"JetBrains Mono",monospace;font-size:.72rem;letter-spacing:.12em;
+  color:var(--paper-2);background:var(--ink);padding:5px 7px;border-radius:6px;
+}
+.brand .name{font-family:"Fraunces",serif;font-weight:600;font-size:1.15rem;letter-spacing:-.01em}
+nav ul{display:flex;gap:7px;list-style:none;margin:0;padding:0}
+/* periodic-table element tiles */
+.el{
+  position:relative;width:64px;height:64px;flex:none;
+  border:1px solid var(--line);border-radius:10px;background:var(--paper-2);
+  cursor:pointer;font-family:inherit;color:var(--ink);padding:4px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  transition:transform .2s cubic-bezier(.2,.9,.3,1),background .2s,box-shadow .22s,color .2s,border-color .2s;
+}
+.el .num{position:absolute;top:5px;left:7px;font-family:"JetBrains Mono",monospace;font-size:.56rem;line-height:1;color:var(--muted)}
+.el .mass{position:absolute;top:5px;right:7px;font-family:"JetBrains Mono",monospace;font-size:.5rem;line-height:1;color:var(--muted);opacity:0;transition:opacity .2s}
+.el .sym{font-family:"Fraunces",serif;font-weight:600;font-size:1.55rem;line-height:1;margin-top:3px}
+.el .nm{font-family:"JetBrains Mono",monospace;font-size:.5rem;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);margin-top:4px;transition:color .2s}
+.el:hover{transform:translateY(-6px) scale(1.18);z-index:6;background:var(--accent-deep);color:#fff;border-color:transparent;box-shadow:var(--shadow-lg)}
+.el.active{transform:translateY(-3px) scale(1.08);z-index:5;background:var(--accent);color:#fff;border-color:transparent;box-shadow:var(--shadow)}
+.el:hover .num,.el:hover .nm,.el:hover .mass,.el.active .num,.el.active .nm,.el.active .mass{color:rgba(255,255,255,.88)}
+.el:hover .mass,.el.active .mass{opacity:1}
+.el.active:hover{background:var(--accent-deep)}
+.menu-btn{display:none}
+/* ---------- views ---------- */
+.view{display:none}
+.view.show{display:block;animation:fade .4s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+/* ---------- hero ---------- */
+.hero{padding:44px 0 56px}
+.eyebrow{
+  font-family:"JetBrains Mono",monospace;font-size:.74rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);margin:0 0 22px
+}
+.hero h1{
+  font-family:"Fraunces",serif;font-weight:500;line-height:1.07;
+  font-size:clamp(2.4rem,6vw,4rem);letter-spacing:-.025em;margin:0;max-width:14ch
+}
+.hero h1 em{font-style:italic;color:var(--accent-deep);position:relative}
+.hero .underline{display:block;width:148px;height:4px;border-radius:4px;background:var(--litmus);margin:30px 0 28px}
+.hero p{font-size:1.18rem;color:var(--ink-soft);max-width:54ch;margin:0}
+.hero .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:34px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;font-family:inherit;font-weight:600;font-size:.95rem;
+  padding:12px 22px;border-radius:10px;cursor:pointer;border:1px solid transparent;transition:transform .12s,box-shadow .18s,background .18s
+}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--ink);color:var(--paper-2)}
+.btn-primary:hover{background:#000;color:#fff}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--ink);background:rgba(30,34,43,.03)}
+/* ---------- section frame ---------- */
+section{padding:62px 0}
+.sec-head{display:flex;align-items:center;gap:16px;margin-bottom:34px}
+.sec-num{font-family:"JetBrains Mono",monospace;font-size:.78rem;color:var(--accent);letter-spacing:.1em}
+.sec-title{font-family:"Fraunces",serif;font-weight:600;font-size:1.7rem;letter-spacing:-.02em;margin:0}
+.sec-head .rule{flex:1;height:1px;background:var(--line)}
+/* ---------- about ---------- */
+#about{padding-top:30px}
+.interests{margin-top:46px;border-top:1px solid var(--line);padding-top:28px}
+.interests-cap{font-family:"JetBrains Mono",monospace;font-size:.78rem;color:var(--accent-deep);letter-spacing:.03em;margin:0 0 16px}
+.gnn-scroll{overflow-x:auto;scrollbar-width:none}
+.gnn-scroll::-webkit-scrollbar{display:none}
+.gnn{width:100%;min-width:640px;height:auto;display:block}
+.gnn-edge{fill:none;stroke:var(--accent);stroke-width:1.7;opacity:.6;stroke-linecap:round;stroke-dasharray:2 9}
+.gnn-edge.flow{animation:gnnflow 2.6s linear infinite}
+@keyframes gnnflow{to{stroke-dashoffset:-22}}
+.gnn-mesh{fill:none;stroke:var(--accent);stroke-width:1;opacity:.11}
+.gnn-layer{font-family:"JetBrains Mono",monospace;font-size:11px;fill:var(--muted);letter-spacing:.18em;text-transform:uppercase}
+.gnn-node{filter:drop-shadow(0 0 2.5px rgba(46,111,134,.45))}
+.gnn-root{fill:var(--ink)}
+.gnn-cat{fill:var(--accent-deep)}
+.gnn-leaf{fill:var(--paper-2);stroke:var(--accent);stroke-width:2}
+.gnn-lbl{font-family:"JetBrains Mono",monospace;font-size:12px;fill:var(--ink-soft)}
+.gnn-lbl.cat{fill:var(--accent-deep);font-size:13px;font-weight:600}
+.gnn-lbl.root{fill:#fff;font-size:12px;font-weight:700}
+.about-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:48px;align-items:start}
+.lede{font-family:"Fraunces",serif;font-size:1.4rem;line-height:1.4;font-weight:400;color:var(--ink);margin:0 0 24px}
+.about-grid p{margin:0 0 18px;color:var(--ink-soft)}
+.about-grid p:last-child{margin-bottom:0}
+.card-note{
+  background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--shadow)
+}
+.card-note .spectrum{margin-bottom:18px;width:60px}
+.photo-card{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);padding:10px;box-shadow:var(--shadow)}
+.photo-card img{width:100%;height:auto;border-radius:9px;display:block}
+.photo-card .caption{font-family:"Fraunces",serif;font-style:italic;font-size:.86rem;color:var(--muted);margin:13px 6px 5px;text-align:center;line-height:1.4}
+.side-cards{display:flex;flex-direction:column;gap:20px}
+.edu-sub{display:block;margin-top:3px;font-size:.86rem;color:var(--muted)}
+/* ---------- journey / timeline ---------- */
+.tl-group{margin-bottom:48px}
+.tl-head{display:flex;align-items:center;gap:14px;font-family:"Fraunces",serif;font-size:1.45rem;font-weight:600;letter-spacing:-.02em;margin:0 0 24px}
+/* machine/console typeface for section headings across the site */
+.sec-title,.tl-head,.tl-card h3,.post h3,.modal h2,#journey .hero h1,#activities .hero h1,#blog .hero h1{font-family:Consolas,"JetBrains Mono",ui-monospace,"Courier New",monospace;letter-spacing:-.01em}
+#journey .hero h1,#activities .hero h1,#blog .hero h1{font-weight:600}
+.tl-head .rule{flex:1;height:1px;background:var(--line)}
+.tl-item{display:grid;grid-template-columns:108px 1fr;gap:22px}
+.tl-item + .tl-item{margin-top:18px}
+.tl-year{font-family:"JetBrains Mono",monospace;font-size:.76rem;color:var(--accent);padding-top:24px;letter-spacing:.03em}
+.tl-card{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);padding:0;overflow:hidden;box-shadow:var(--shadow);transition:transform .16s,box-shadow .2s}
+.tl-card:hover{transform:translateY(-2px);box-shadow:var(--shadow-lg)}
+.tl-card:hover .winbar{background:#E7E2D2}
+.tl-card .screen{gap:0;padding:24px}
+.tl-card h3{font-family:"Fraunces",serif;font-size:1.18rem;margin:0 0 6px;font-weight:600;letter-spacing:-.01em}
+.tl-card .tl-meta{font-size:.84rem;color:var(--muted);margin:0 0 13px;font-style:italic}
+.tl-card p{margin:0;color:var(--ink-soft);font-size:.95rem}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px}
+.chips span{font-size:.73rem;background:rgba(46,111,134,.09);color:var(--accent-deep);padding:5px 11px;border-radius:999px;font-weight:500}
+.skills-card{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);padding:0;overflow:hidden;box-shadow:var(--shadow)}
+.skills-card .screen{gap:0;padding:6px 24px 18px}
+.skills-card .screen::before{content:none}
+.db-bar{display:flex;align-items:center;gap:10px;padding:13px 18px;background:rgba(46,111,134,.1);border-bottom:1px solid var(--line)}
+.db-ico{width:21px;height:21px;flex:none;color:var(--accent-deep)}
+.db-name{font-family:"JetBrains Mono",monospace;font-size:.8rem;letter-spacing:.04em;color:var(--accent-deep);font-weight:500}
+.db-query{font-family:"JetBrains Mono",monospace;font-size:.78rem;color:var(--accent-deep);padding:14px 0 12px;border-bottom:1px solid var(--line);overflow-x:auto;white-space:nowrap}
+.skill-row{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:14px 0;border-bottom:1px solid var(--line);align-items:start}
+.skill-row:last-child{border-bottom:0;padding-bottom:0}
+.skill-row.head{padding:10px 0;border-bottom:1px solid var(--line)}
+.skill-row.head .lbl,.skill-row.head .db-h{font-family:"JetBrains Mono",monospace;font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-top:0}
+.skill-row .lbl{font-family:"JetBrains Mono",monospace;font-size:.74rem;color:var(--muted);letter-spacing:.04em;padding-top:4px}
+.db-foot{font-family:"JetBrains Mono",monospace;font-size:.7rem;color:var(--muted);letter-spacing:.04em;padding-top:14px;border-top:1px dashed var(--line);margin-top:4px}
+.pub-card{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);padding:26px;box-shadow:var(--shadow)}
+.pub-card .cite{color:var(--ink-soft);font-size:.95rem;margin:0 0 14px;line-height:1.55}
+.pub-card .cite b{color:var(--ink)}
+@media (max-width:620px){
+  .tl-item{grid-template-columns:1fr;gap:7px}
+  .tl-year{padding-top:0}
+  .skill-row{grid-template-columns:1fr;gap:8px}
+  .skill-row .lbl{padding-top:0}
+}
+@media (max-width:560px){
+  .brand .name{display:none}
+  nav{overflow-x:auto;overflow-y:visible;scrollbar-width:none;padding:6px 0}
+  nav::-webkit-scrollbar{display:none}
+  nav ul{gap:5px;flex-wrap:nowrap}
+  .el{width:54px;height:54px}
+  .el .sym{font-size:1.3rem}
+  .el:hover,.el.active{transform:translateY(-2px) scale(1.06)}
+}
+.tag.up{background:rgba(91,168,107,.16);color:#2f7741}
+/* blog category filters + colour-coded tags */
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px}
+.filt{font-family:inherit;font-size:.85rem;font-weight:500;padding:8px 15px;border-radius:999px;border:1px solid var(--line);background:var(--paper-2);color:var(--ink-soft);cursor:pointer;transition:background .15s,color .15s,border-color .15s}
+.filt:hover{border-color:var(--ink-soft);color:var(--ink)}
+.filt.active{background:var(--ink);color:var(--paper-2);border-color:var(--ink)}
+.empty-note{color:var(--muted);font-style:italic;padding:18px 2px}
+.tag.professional{background:rgba(46,111,134,.12);color:#235567}
+.tag.science{background:rgba(76,140,90,.15);color:#3a6b46}
+.tag.feminism{background:rgba(140,90,140,.14);color:#7a4a7a}
+.tag.mind{background:rgba(150,110,70,.15);color:#7e5a32}
+.card-note h3{font-family:"Fraunces",serif;font-size:1.15rem;margin:0 0 12px;font-weight:600}
+.tenets{list-style:none;margin:0;padding:0}
+.tenets li{padding:11px 0;border-bottom:1px solid var(--line);font-size:.95rem;color:var(--ink-soft)}
+.tenets li:last-child{border-bottom:0;padding-bottom:0}
+.tenets b{color:var(--ink);font-weight:600}
+/* ---------- blog ---------- */
+.blog-intro{max-width:60ch;color:var(--ink-soft);font-size:1.08rem;margin:0 0 36px}
+.posts{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.post{
+  text-align:left;background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);
+  padding:0;overflow:hidden;cursor:pointer;font-family:inherit;box-shadow:var(--shadow);
+  transition:transform .16s,box-shadow .2s,border-color .2s;display:flex;flex-direction:column
+}
+.post:hover{transform:translateY(-3px);box-shadow:var(--shadow-lg);border-color:#C9C3B1}
+/* window title bar */
+.winbar{display:flex;align-items:center;gap:12px;padding:11px 15px;background:#ECE8DB;border-bottom:1px solid var(--line)}
+.post:hover .winbar{background:#E7E2D2}
+.dots{position:relative;width:11px;height:11px;border-radius:50%;flex:none;
+  background:#E5685E;box-shadow:18px 0 0 #E5B14A,36px 0 0 #5BA86B}
+.winfile{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:.68rem;color:var(--muted);letter-spacing:.02em}
+/* screen */
+.screen{position:relative;display:flex;flex-direction:column;gap:12px;padding:22px 24px 24px}
+.screen::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(rgba(30,34,43,.028) 0 1px,transparent 1px 3px)}
+.screen>*{position:relative}
+.post .meta{display:flex;align-items:center;gap:10px;font-family:"JetBrains Mono",monospace;font-size:.72rem;color:var(--muted);letter-spacing:.04em}
+.tag{padding:3px 9px;border-radius:999px;font-size:.68rem;background:rgba(46,111,134,.1);color:var(--accent-deep);letter-spacing:.05em}
+.tag.soon{background:rgba(214,69,61,.1);color:#b23b34}
+.post h3{font-size:1.28rem;line-height:1.25;margin:0;font-weight:600;letter-spacing:-.015em}
+.caret{display:inline-block;width:.14em;height:1.05em;margin-left:3px;vertical-align:-2px;background:var(--accent);animation:blink 1.1s steps(1) infinite}
+@keyframes blink{0%,50%{opacity:1}50.01%,100%{opacity:0}}
+.post p{margin:0;color:var(--ink-soft);font-size:.95rem;flex:1}
+.post .more{font-size:.85rem;font-weight:600;color:var(--accent);display:inline-flex;align-items:center;gap:6px}
+.post .more::after{content:"→";transition:transform .16s}
+.post:hover .more::after{transform:translateX(4px)}
+/* ---------- modal ---------- */
+.overlay{
+  position:fixed;inset:0;z-index:100;background:rgba(20,22,28,.5);backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;padding:24px
+}
+.overlay.open{display:flex;animation:fade .25s ease}
+.modal{
+  background:var(--paper-2);border-radius:18px;max-width:600px;width:100%;max-height:86vh;overflow:auto;
+  box-shadow:var(--shadow-lg);position:relative;animation:pop .3s cubic-bezier(.2,.9,.3,1)
+}
+@keyframes pop{from{opacity:0;transform:scale(.96) translateY(10px)}to{opacity:1;transform:none}}
+.modal .top-rule{height:5px;background:var(--litmus)}
+.modal-body{padding:34px}
+.modal .meta{display:flex;gap:10px;align-items:center;font-family:"JetBrains Mono",monospace;font-size:.72rem;color:var(--muted);margin-bottom:16px;letter-spacing:.04em}
+.modal h2{font-family:"Fraunces",serif;font-weight:600;font-size:1.7rem;line-height:1.2;margin:0 0 18px;letter-spacing:-.02em}
+.modal p{color:var(--ink-soft);margin:0 0 16px}
+.modal-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.modal-close{
+  position:absolute;top:16px;right:16px;width:36px;height:36px;border-radius:50%;border:0;cursor:pointer;
+  background:rgba(30,34,43,.06);color:var(--ink);font-size:1.15rem;line-height:1;display:flex;align-items:center;justify-content:center;transition:background .15s
+}
+.modal-close:hover{background:rgba(30,34,43,.13)}
+/* ---------- contact ---------- */
+#contact{border-top:1px solid var(--line);padding-top:22px}
+.lab-intro{max-width:60ch;color:var(--ink-soft);font-size:1.08rem;margin:0 0 30px}
+.lab-bench{position:relative;display:grid;grid-template-columns:repeat(auto-fit,minmax(122px,1fr));gap:14px;padding-bottom:18px}
+.lab-bench::after{content:"";position:absolute;left:0;right:0;bottom:6px;height:2px;border-radius:2px;background:var(--line)}
+.lab-note{font-family:"JetBrains Mono",monospace;font-size:.72rem;color:var(--muted);letter-spacing:.04em;margin:14px 0 0}
+.vessel{position:relative;display:flex;flex-direction:column;align-items:center;gap:7px;padding:18px 8px 12px;border-radius:var(--r);background:var(--paper-2);border:1px solid var(--line);box-shadow:var(--shadow);color:var(--ink);text-align:center;transition:transform .18s cubic-bezier(.2,.9,.3,1),box-shadow .2s,border-color .2s}
+.vessel:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg);border-color:#C9C3B1;z-index:2}
+.vessel .glass{width:52px;height:66px;display:block}
+.vessel .glass .outline{fill:none;stroke:var(--ink-soft);stroke-width:2.4;stroke-linejoin:round;stroke-linecap:round}
+.vessel .glass .liquid{fill:var(--liquid);opacity:.82;transition:opacity .2s}
+.vessel:hover .glass .liquid{opacity:1}
+.vessel .glass .bubble{fill:#fff;opacity:0;transform-box:fill-box;transform-origin:center}
+.vessel:hover .glass .bubble{animation:rise 1.3s ease-in infinite}
+.thermo .mercury{transform-box:fill-box;transform-origin:center bottom;transform:scaleY(.5);transition:transform .45s cubic-bezier(.2,.9,.3,1)}
+.vessel:hover .thermo .mercury{transform:scaleY(1)}
+@keyframes rise{0%{opacity:0;transform:translateY(2px) scale(.6)}25%{opacity:.85}100%{opacity:0;transform:translateY(-20px) scale(1)}}
+.vessel .v-name{font-family:"Fraunces",serif;font-weight:600;font-size:1.02rem;color:var(--accent-deep);letter-spacing:-.01em}
+.vessel:hover .v-name{text-decoration:underline;text-underline-offset:3px}
+.vessel .v-sub{font-family:"JetBrains Mono",monospace;font-size:.6rem;letter-spacing:.06em;color:var(--muted);text-transform:uppercase}
+.vessel.primary{background:var(--ink);border-color:transparent}
+.vessel.primary .v-name{color:#fff}
+.vessel.primary .v-sub{color:rgba(255,255,255,.65)}
+.vessel.primary .glass .outline{stroke:rgba(255,255,255,.82)}
+.form-embed{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);padding:28px;box-shadow:var(--shadow)}
+form{background:var(--paper-2);border:1px solid var(--line);border-radius:var(--r);padding:28px;box-shadow:var(--shadow)}
+.field{margin-bottom:18px}
+.field label{display:block;font-size:.82rem;font-weight:600;margin-bottom:7px;color:var(--ink)}
+.field input,.field textarea{
+  width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:9px;background:var(--paper);
+  font-family:inherit;font-size:.95rem;color:var(--ink);transition:border-color .15s,box-shadow .15s
+}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(46,111,134,.14)}
+.field textarea{resize:vertical;min-height:120px}
+.field .err{color:#b23b34;font-size:.78rem;margin-top:6px;display:none}
+.field.invalid .err{display:block}
+.field.invalid input,.field.invalid textarea{border-color:#d6453d}
+form .btn-primary{width:100%;justify-content:center}
+.form-note{font-size:.8rem;color:var(--muted);margin:14px 0 0;text-align:center}
+.success{
+  display:none;text-align:center;padding:18px;border-radius:9px;background:rgba(91,168,107,.12);
+  color:#2f7741;font-weight:500;margin-top:16px
+}
+.success.show{display:block}
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:34px 0;margin-top:20px}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap;font-size:.85rem;color:var(--muted)}
+.foot .quote{font-family:"Fraunces",serif;font-style:italic;color:var(--ink-soft)}
+/* keyboard focus */
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+/* ---------- responsive ---------- */
+@media (max-width:760px){
+  .about-grid,.contact-grid{grid-template-columns:1fr;gap:32px}
+  .posts{grid-template-columns:1fr}
+  nav ul{gap:6px}
+  .brand .name{font-size:1.02rem}
+  .hero{padding:60px 0 44px}
+  section{padding:48px 0}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav">
+    <button class="brand" onclick="showView('home');scrollTo2('about')" aria-label="Home — Fareeda Kalsoom">
+      <span class="el brand-el"><span class="num">9</span><span class="mass">19.00</span><span class="sym">F</span><span class="nm">Fareeda</span></span>
+      <span class="el brand-el"><span class="num">19</span><span class="mass">39.10</span><span class="sym">K</span><span class="nm">Kalsoom</span></span>
+    </button>
+    <nav>
+      <ul>
+        <li><button class="el navlink active" data-link="home" onclick="showView('home');scrollTo2('about')"><span class="num">85</span><span class="mass">210</span><span class="sym">At</span><span class="nm">About</span></button></li>
+        <li><button class="el navlink" data-link="journey" onclick="showView('journey')"><span class="num">63</span><span class="mass">152.0</span><span class="sym">Eu</span><span class="nm">Education</span></button></li>
+        <li><button class="el navlink" data-link="activities" onclick="showView('activities')"><span class="num">89</span><span class="mass">227</span><span class="sym">Ac</span><span class="nm">Activities</span></button></li>
+        <li><button class="el navlink" data-link="blog" onclick="showView('blog')"><span class="num">5</span><span class="mass">10.81</span><span class="sym">B</span><span class="nm">Blog</span></button></li>
+        <li><button class="el navlink" data-link="contact" onclick="showView('home');scrollTo2('contact')"><span class="num">6</span><span class="mass">12.01</span><span class="sym">C</span><span class="nm">Contact</span></button></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HOME VIEW ============ -->
+<main id="home" class="view show">
+
+  <section id="about">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">01</span>
+        <h2 class="sec-title">About</h2>
+        <span class="rule"></span>
+      </div>
+      <div class="about-grid">
+        <div>
+          <p class="lede">During my bachelor's in Chemistry, a roommate once photographed me asleep in a thinking pose and showed it to me in the morning. "See?" she laughed. "You were thinking even while sleeping."</p>
+          <p>Maybe it was a coincidence. But I genuinely try to be mindful of every aspect of life. I'm a computational chemist interested in multiscale simulations and physics-informed ML — applying data-driven methods to accelerate materials discovery and catalysis.</p>
+          <p>Along with that, I challenge stereotypes fiercely. That doesn't mean I think I'm always right — if you have a counterargument, I'll make room for it. Either it expands my understanding or it sharpens how I express my own. Both are worth having.</p>
+          <div class="cta-row" style="margin-top:30px">
+            <button class="btn btn-primary" onclick="showView('blog')">Read the essays</button>
+          </div>
+        </div>
+        <div class="side-cards">
+          <aside class="photo-card">
+            <img src="profile.png" alt="Fareeda Kalsoom" loading="lazy">
+            <p class="caption">Coffee in hand, mid-thought — as usual.</p>
+          </aside>
+        </div>
+      </div>
+
+      <div class="interests">
+        <p class="interests-cap">interests.gnn — what I'm into, mapped as a little graph network</p>
+        <div class="gnn-scroll">
+          <svg class="gnn" viewBox="0 0 900 420" role="img" aria-label="A neural network where my reading, watching, and outdoor interests are the inputs that feed forward into me as the output node.">
+            <g class="mesh">
+              <path class="gnn-mesh" d="M570 120 Q395 75 220 30"/><path class="gnn-mesh" d="M570 120 Q395 97 220 75"/><path class="gnn-mesh" d="M570 120 Q395 120 220 120"/><path class="gnn-mesh" d="M570 120 Q395 142 220 165"/><path class="gnn-mesh" d="M570 120 Q395 165 220 210"/><path class="gnn-mesh" d="M570 120 Q395 187 220 255"/><path class="gnn-mesh" d="M570 120 Q395 210 220 300"/><path class="gnn-mesh" d="M570 120 Q395 232 220 345"/><path class="gnn-mesh" d="M570 120 Q395 255 220 390"/>
+              <path class="gnn-mesh" d="M570 278 Q395 154 220 30"/><path class="gnn-mesh" d="M570 278 Q395 176 220 75"/><path class="gnn-mesh" d="M570 278 Q395 199 220 120"/><path class="gnn-mesh" d="M570 278 Q395 221 220 165"/><path class="gnn-mesh" d="M570 278 Q395 244 220 210"/><path class="gnn-mesh" d="M570 278 Q395 266 220 255"/><path class="gnn-mesh" d="M570 278 Q395 289 220 300"/><path class="gnn-mesh" d="M570 278 Q395 311 220 345"/><path class="gnn-mesh" d="M570 278 Q395 334 220 390"/>
+              <path class="gnn-mesh" d="M570 367 Q395 198 220 30"/><path class="gnn-mesh" d="M570 367 Q395 221 220 75"/><path class="gnn-mesh" d="M570 367 Q395 243 220 120"/><path class="gnn-mesh" d="M570 367 Q395 266 220 165"/><path class="gnn-mesh" d="M570 367 Q395 288 220 210"/><path class="gnn-mesh" d="M570 367 Q395 311 220 255"/><path class="gnn-mesh" d="M570 367 Q395 333 220 300"/><path class="gnn-mesh" d="M570 367 Q395 356 220 345"/><path class="gnn-mesh" d="M570 367 Q395 378 220 390"/>
+            </g>
+            <g class="edges">
+              <path class="gnn-edge flow" d="M220 30 Q395 75 570 120" style="animation-delay:0s"/>
+              <path class="gnn-edge flow" d="M220 75 Q395 97 570 120" style="animation-delay:.2s"/>
+              <path class="gnn-edge flow" d="M220 120 Q395 120 570 120" style="animation-delay:.4s"/>
+              <path class="gnn-edge flow" d="M220 165 Q395 142 570 120" style="animation-delay:.6s"/>
+              <path class="gnn-edge flow" d="M220 210 Q395 165 570 120" style="animation-delay:.8s"/>
+              <path class="gnn-edge flow" d="M220 255 Q395 266 570 278" style="animation-delay:.3s"/>
+              <path class="gnn-edge flow" d="M220 300 Q395 289 570 278" style="animation-delay:.5s"/>
+              <path class="gnn-edge flow" d="M220 345 Q395 356 570 367" style="animation-delay:.4s"/>
+              <path class="gnn-edge flow" d="M220 390 Q395 378 570 367" style="animation-delay:.7s"/>
+              <path class="gnn-edge flow" d="M570 120 Q695 165 820 210" style="animation-delay:1s"/>
+              <path class="gnn-edge flow" d="M570 278 Q695 244 820 210" style="animation-delay:1.2s"/>
+              <path class="gnn-edge flow" d="M570 367 Q695 289 820 210" style="animation-delay:1.4s"/>
+            </g>
+            <g class="leaves">
+              <circle class="gnn-node gnn-leaf" cx="220" cy="30" r="6"/><text class="gnn-lbl leaf" x="202" y="30" text-anchor="end" dominant-baseline="middle">Psychology</text>
+              <circle class="gnn-node gnn-leaf" cx="220" cy="75" r="6"/><text class="gnn-lbl leaf" x="202" y="75" text-anchor="end" dominant-baseline="middle">Politics</text>
+              <circle class="gnn-node gnn-leaf" cx="220" cy="120" r="6"/><text class="gnn-lbl leaf" x="202" y="120" text-anchor="end" dominant-baseline="middle">Biographies</text>
+              <circle class="gnn-node gnn-leaf" cx="220" cy="165" r="6"/><text class="gnn-lbl leaf" x="202" y="165" text-anchor="end" dominant-baseline="middle">Philosophy</text>
+              <circle class="gnn-node gnn-leaf" cx="220" cy="210" r="6"/><text class="gnn-lbl leaf" x="202" y="210" text-anchor="end" dominant-baseline="middle">Sociology</text>
+              <circle class="gnn-node gnn-leaf" cx="220" cy="255" r="6"/><text class="gnn-lbl leaf" x="202" y="255" text-anchor="end" dominant-baseline="middle">Documentaries</text>
+              <circle class="gnn-node gnn-leaf" cx="220" cy="300" r="6"/><text class="gnn-lbl leaf" x="202" y="300" text-anchor="end" dominant-baseline="middle">Science fiction</text>
+              <circle class="gnn-node gnn-leaf" cx="220" cy="345" r="6"/><text class="gnn-lbl leaf" x="202" y="345" text-anchor="end" dominant-baseline="middle">Cycling</text>
+              <circle class="gnn-node gnn-leaf" cx="220" cy="390" r="6"/><text class="gnn-lbl leaf" x="202" y="390" text-anchor="end" dominant-baseline="middle">Hiking</text>
+            </g>
+            <g class="cats">
+              <text class="gnn-lbl cat" x="570" y="100" text-anchor="middle">Reading</text><circle class="gnn-node gnn-cat" cx="570" cy="120" r="10"/>
+              <text class="gnn-lbl cat" x="570" y="258" text-anchor="middle">Watching</text><circle class="gnn-node gnn-cat" cx="570" cy="278" r="10"/>
+              <text class="gnn-lbl cat" x="570" y="347" text-anchor="middle">Outdoors</text><circle class="gnn-node gnn-cat" cx="570" cy="367" r="10"/>
+            </g>
+            <circle class="gnn-node gnn-root" cx="820" cy="210" r="15"/>
+            <text class="gnn-lbl root" x="820" y="210" text-anchor="middle" dominant-baseline="central">F</text>
+            <text class="gnn-lbl cat" x="820" y="240" text-anchor="middle">me</text>
+            <g class="layers">
+              <text class="gnn-layer" x="210" y="415" text-anchor="middle">input</text>
+              <text class="gnn-layer" x="570" y="415" text-anchor="middle">hidden</text>
+              <text class="gnn-layer" x="820" y="415" text-anchor="middle">output</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="sec-num">02</span>
+        <h2 class="sec-title">Contact Lab</h2>
+        <span class="rule"></span>
+      </div>
+      <p class="lab-intro">Have a counterargument, a question, or just a thought worth thinking together? Pick a flask and pour it in — constructive criticism on any essay is always welcome.</p>
+      <div class="lab-bench">
+
+        <a class="vessel primary" href="https://docs.google.com/forms/d/1p0NXGCFv2S1VXo7P56CpNg4T9pgE0kryRVdfB_tkSNQ/viewform" target="_blank" rel="noopener" style="--liquid:#5E9DB0">
+          <svg class="glass" viewBox="0 0 64 84" aria-hidden="true">
+            <path class="liquid" d="M19 54 L45 54 L50 66 Q52 72 47 72 L17 72 Q12 72 14 66 Z"/>
+            <circle class="bubble" cx="28" cy="62" r="2"/><circle class="bubble" cx="34" cy="60" r="1.6" style="animation-delay:.4s"/><circle class="bubble" cx="31" cy="65" r="1.4" style="animation-delay:.8s"/>
+            <path class="outline" d="M25 12 L39 12 L39 30 L51 66 Q53 72 47 72 L17 72 Q11 72 13 66 L25 30 Z"/>
+          </svg>
+          <span class="v-name">Contact Form ↗</span>
+          <span class="v-sub">main reaction</span>
+        </a>
+
+        <a class="vessel" href="https://www.linkedin.com/in/fareeda-kalsoom-b54b0a416" target="_blank" rel="noopener" style="--liquid:#2E6F86">
+          <svg class="glass" viewBox="0 0 64 84" aria-hidden="true">
+            <path class="liquid" d="M17 50 A15 15 0 0 0 47 50 A15 15 0 0 0 17 50 Z"/>
+            <circle class="bubble" cx="30" cy="52" r="2"/><circle class="bubble" cx="35" cy="50" r="1.5" style="animation-delay:.5s"/>
+            <path class="outline" d="M27 10 L37 10 L37 36 A18 18 0 1 1 27 36 Z"/>
+            <path class="outline" d="M25 10 L39 10"/>
+          </svg>
+          <span class="v-name">LinkedIn</span>
+          <span class="v-sub">profile</span>
+        </a>
+
+        <a class="vessel" href="https://substack.com/@fareedakalsoom" target="_blank" rel="noopener" style="--liquid:#C46A3F">
+          <svg class="glass" viewBox="0 0 64 84" aria-hidden="true">
+            <path class="liquid" d="M18 46 L46 46 L46 68 Q46 72 42 72 L22 72 Q18 72 18 68 Z"/>
+            <circle class="bubble" cx="29" cy="58" r="2"/><circle class="bubble" cx="36" cy="55" r="1.5" style="animation-delay:.6s"/>
+            <path class="outline" d="M18 18 L46 18 L46 68 Q46 72 42 72 L22 72 Q18 72 18 68 Z"/>
+            <path class="outline" d="M16 16 L20 19"/><path class="outline" d="M40 30 L46 30"/><path class="outline" d="M40 40 L46 40"/><path class="outline" d="M40 50 L46 50"/>
+          </svg>
+          <span class="v-name">Substack</span>
+          <span class="v-sub">essays</span>
+        </a>
+
+        <a class="vessel" href="https://mastodon.social/@Fareeda_Kalsoom" target="_blank" rel="noopener" style="--liquid:#6B4FA0">
+          <svg class="glass" viewBox="0 0 64 84" aria-hidden="true">
+            <path class="liquid" d="M26 48 L38 48 L38 70 L26 70 Z"/>
+            <circle class="bubble" cx="30" cy="60" r="1.8"/><circle class="bubble" cx="34" cy="57" r="1.4" style="animation-delay:.5s"/>
+            <path class="outline" d="M26 12 L38 12 L38 70 L44 74 L20 74 L26 70 Z"/>
+            <path class="outline" d="M24 12 L40 12"/>
+            <path class="outline" d="M26 24 L31 24"/><path class="outline" d="M26 34 L31 34"/><path class="outline" d="M26 44 L31 44"/>
+          </svg>
+          <span class="v-name">Mastodon</span>
+          <span class="v-sub">@Fareeda_Kalsoom</span>
+        </a>
+
+        <a class="vessel" title="Click to copy username" onclick="navigator.clipboard&amp;&amp;navigator.clipboard.writeText('fareeda_kalsoom');this.querySelector('.v-sub').textContent='copied!';return false;" style="--liquid:#4F6BA0;cursor:pointer">
+          <svg class="glass" viewBox="0 0 64 84" aria-hidden="true">
+            <path class="liquid" d="M26 44 L38 44 L38 60 A6 6 0 0 1 26 60 Z"/>
+            <circle class="bubble" cx="31" cy="54" r="1.7"/><circle class="bubble" cx="34" cy="51" r="1.3" style="animation-delay:.5s"/>
+            <path class="outline" d="M26 10 L26 60 A6 6 0 0 0 38 60 L38 10"/>
+            <path class="outline" d="M24 10 L40 10"/>
+          </svg>
+          <span class="v-name">Discord</span>
+          <span class="v-sub">@fareeda_kalsoom</span>
+        </a>
+
+        <a class="vessel" href="https://www.instagram.com/ful_feelings?igsh=MTBrZm9rZ2V4ZGV5eA==" target="_blank" rel="noopener" style="--liquid:#B45A7A">
+          <svg class="glass thermo" viewBox="0 0 64 84" aria-hidden="true">
+            <rect class="liquid mercury" x="30" y="22" width="4" height="38"/>
+            <circle class="liquid" cx="32" cy="64" r="6.2"/>
+            <path class="outline" d="M29 24 a3 3 0 0 1 6 0 L35 57 L29 57 Z"/>
+            <circle class="outline" cx="32" cy="64" r="8"/>
+            <path class="outline" d="M35 30 L38 30"/><path class="outline" d="M35 38 L38 38"/><path class="outline" d="M35 46 L38 46"/>
+          </svg>
+          <span class="v-name">Instagram</span>
+          <span class="v-sub">Psychopolitical</span>
+        </a>
+
+        <a class="vessel" href="https://www.instagram.com/she_is_full_human?igsh=bzRlM3BoajRidWdq" target="_blank" rel="noopener" style="--liquid:#4C8C5A">
+          <svg class="glass" viewBox="0 0 64 84" aria-hidden="true">
+            <path class="liquid" d="M13 52 Q13 63 32 63 Q51 63 51 52 Q51 57 32 57 Q13 57 13 52 Z"/>
+            <ellipse class="liquid" cx="32" cy="52" rx="17" ry="4"/>
+            <circle class="bubble" cx="27" cy="52" r="1.6"/><circle class="bubble" cx="37" cy="51" r="1.3" style="animation-delay:.6s"/>
+            <ellipse class="outline" cx="32" cy="44" rx="22" ry="5.5"/>
+            <path class="outline" d="M10 44 Q10 50 10 50 Q10 60 32 60 Q54 60 54 50 Q54 50 54 44"/>
+            <ellipse class="outline" cx="32" cy="52" rx="22" ry="5.5"/>
+          </svg>
+          <span class="v-name">Instagram</span>
+          <span class="v-sub">Sociopolitical</span>
+        </a>
+
+      </div>
+      <p class="lab-note">// Discord copies its handle on tap · everything else opens in a new tab</p>
+    </div>
+  </section>
+</main>
+
+<!-- ============ JOURNEY VIEW ============ -->
+<main id="journey" class="view">
+  <div class="wrap">
+    <div class="hero" style="padding-bottom:34px">
+      <p class="eyebrow">The path so far</p>
+      <h1 style="font-size:clamp(2rem,5vw,3.1rem)">Education &amp; milestones</h1>
+      <span class="underline"></span>
+      <p class="blog-intro">The disciplines I've moved through, what each one taught me, and a little of the work I'm proud of. This page grows as I do.</p>
+    </div>
+
+    <div class="tl-group">
+      <h2 class="tl-head">Education <span class="rule"></span></h2>
+      <div class="tl-item">
+        <div class="tl-year">2023 – 2025</div>
+        <div class="tl-card">
+          <h3>MSc · Theoretical Chemistry &amp; Computational Modelling</h3>
+          <p class="tl-meta"><a href="https://www.rug.nl" target="_blank" rel="noopener">University of Groningen</a>, Netherlands · Erasmus Mundus scholarship</p>
+          <p>My master's degree, where I went deep into theoretical chemistry and learned to let data and code carry the heavy lifting in research — including my thesis in the <a href="https://pollicegroup.web.rug.nl/former-members.html" target="_blank" rel="noopener">Pollice Group</a> on using automated workflows to design better catalysts.</p>
+          <div class="chips">
+            <span>Python</span><span>High Performance Computing</span><span>Multiscale Modelling</span><span>Quantum Chemistry Methods</span><span>Molecular Dynamics</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2024 – 2025</div>
+        <div class="tl-card">
+          <h3>Master's exchange semester</h3>
+          <p class="tl-meta"><a href="https://www.univ-tlse3.fr" target="_blank" rel="noopener">Université Toulouse III – Paul Sabatier</a>, France</p>
+          <p>A semester abroad as part of my master's, taking advanced coursework in electronic structure, molecular modelling, and machine-learning methods applied to biomolecules — including a module on quantum computing.</p>
+          <div class="chips">
+            <span>Advanced Electronic Structure Methods</span><span>Machine Learning &amp; QSAR</span><span>Python</span><span>Quantum Computing</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2018 – 2022</div>
+        <div class="tl-card">
+          <h3>BSc in Chemistry</h3>
+          <p class="tl-meta"><a href="https://www.pu.edu.pk" target="_blank" rel="noopener">University of the Punjab</a>, Pakistan</p>
+          <p>Where it began — a strong grounding in chemistry, and my first taste of computational research through a DFT study of materials for organic solar cells.</p>
+          <div class="chips">
+            <span>Chemistry foundations</span><span>First DFT research</span><span>Computational modelling</span><span>Scientific writing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-group">
+      <h2 class="tl-head">Programs &amp; recognition <span class="rule"></span></h2>
+      <div class="tl-item">
+        <div class="tl-year">2025</div>
+        <div class="tl-card">
+          <h3><a href="https://www.quantensysteme.info/nachrichten/detailseite/q/das-war-die-quantum-future-academy-2025" target="_blank" rel="noopener">German–Dutch Quantum Future Academy</a></h3>
+          <p class="tl-meta">German Federal Ministry of Research &amp; Quantum Delta Netherlands</p>
+          <p>Selected as one of just 15 participants from the Netherlands for this funded program — a week of hands-on workshops, lab tours, and hackathons across the quantum technologies.</p>
+          <div class="chips">
+            <span>Quantum computing</span><span>Quantum sensing</span><span>Quantum communication</span><span>Photonics</span>
+          </div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2021</div>
+        <div class="tl-card">
+          <h3>Amal Career-Prep Fellowship</h3>
+          <p class="tl-meta">Stanford-funded · <a href="https://www.amalacademy.org/amal-career-prep-fellowship" target="_blank" rel="noopener">Amal Academy</a> — graduated with Honors</p>
+          <p>An intensive I completed with Honors, focused on communication and collaboration — arguably where my conviction about <em>how</em> ideas get shared first took root.</p>
+          <div class="chips">
+            <span>Communication</span><span>Teamwork</span><span>Professional development</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-group">
+      <h2 class="tl-head">Skills Database <span class="rule"></span></h2>
+      <div class="skills-card db">
+        <div class="db-bar">
+          <svg class="db-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true">
+            <ellipse cx="12" cy="5.5" rx="7.5" ry="2.8"/>
+            <path d="M4.5 5.5 V18.5 A7.5 2.8 0 0 0 19.5 18.5 V5.5"/>
+            <path d="M4.5 10.5 A7.5 2.8 0 0 0 19.5 10.5"/>
+            <path d="M4.5 14.5 A7.5 2.8 0 0 0 19.5 14.5"/>
+          </svg>
+          <span class="db-name">skills.db</span>
+        </div>
+        <div class="screen">
+          <div class="db-query">&gt; SELECT category, items FROM skills ORDER BY category;</div>
+          <div class="skill-row head"><span class="lbl">category</span><span class="db-h">items</span></div>
+          <div class="skill-row"><span class="lbl">Comp. chemistry</span><div class="chips" style="margin:0"><span>Gaussian</span><span>GaussView</span><span>ORCA</span><span>AMS</span><span>xTB (GFNn)</span><span>CREST</span><span>Multiwfn</span><span>Chemcraft</span><span>Avogadro</span><span>GROMACS</span><span>PyMOL</span></div></div>
+          <div class="skill-row"><span class="lbl">ML &amp; data science</span><div class="chips" style="margin:0"><span>Scikit-learn</span><span>TensorFlow (Keras)</span><span>RDKit (cheminformatics)</span><span>pandas</span><span>NumPy</span><span>Matplotlib</span><span>MySQL</span><span>MongoDB</span></div></div>
+          <div class="skill-row"><span class="lbl">Programming &amp; HPC</span><div class="chips" style="margin:0"><span>Python (automation, data analysis, ML pipelines)</span><span>Bash (HPC scripting)</span><span>Linux</span><span>C++ (basic)</span><span>Fortran (basic)</span></div></div>
+          <div class="skill-row"><span class="lbl">Tools</span><div class="chips" style="margin:0"><span>Git</span><span>Jupyter</span><span>Visual Studio Code</span><span>OpenBabel</span><span>Zotero</span><span>Obsidian</span></div></div>
+          <div class="skill-row"><span class="lbl">Languages</span><div class="chips" style="margin:0"><span>English (C1)</span><span>German (A1)</span><span>Urdu (native)</span><span>Punjabi (native)</span><span>Hindi (B2)</span></div></div>
+          <div class="db-foot" id="skillCount"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-group">
+      <h2 class="tl-head">Selected publication <span class="rule"></span></h2>
+      <div class="pub-card">
+        <p class="cite"><b>Kalsoom, F.</b>, Farooq, U., Salman, M., &amp; Hussain, R. (2023). A DFT Study on the Impact of Saturated and Conjugated Side Chains on the Optoelectronic Performance of Y-series Non-fullerene Acceptors. <em>Journal of Computational Biophysics and Chemistry, 22</em>(9), 947–958.</p>
+        <a class="btn btn-ghost" href="https://doi.org/10.1142/S2737416523420048" target="_blank" rel="noopener">Read the paper →</a>
+      </div>
+    </div>
+
+    <div style="padding:34px 0 10px"></div>
+  </div>
+</main>
+
+<!-- ============ ACTIVITIES VIEW ============ -->
+<main id="activities" class="view">
+  <div class="wrap">
+    <div class="hero" style="padding-bottom:34px">
+      <p class="eyebrow">Beyond the lab</p>
+      <h1 style="font-size:clamp(2rem,5vw,3.1rem)">Activities &amp; community</h1>
+      <span class="underline"></span>
+      <p class="blog-intro">The conferences I take part in and the causes I give time to. Staying connected to people and ideas matters as much to me as the research itself.</p>
+    </div>
+
+    <div class="tl-group">
+      <h2 class="tl-head">Conferences <span class="rule"></span></h2>
+      <div class="tl-item">
+        <div class="tl-year">2025</div>
+        <div class="tl-card">
+          <h3><a href="https://www.acnetwork.nl/chemai#speaker" target="_blank" rel="noopener">Chem AI 2025</a></h3>
+          <p class="tl-meta">Amsterdam, Netherlands</p>
+          <p>Took part in this conference at the intersection of chemistry and artificial intelligence — a chance to connect the computational thinking from my own research with the fast-moving world of AI, and to meet the people shaping it.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-group">
+      <h2 class="tl-head">Volunteering &amp; community <span class="rule"></span></h2>
+      <div class="tl-item">
+        <div class="tl-year">2024 – 2025</div>
+        <div class="tl-card">
+          <h3>Program Representative — TCCM Master's</h3>
+          <p class="tl-meta"><a href="https://www.em-a.eu/" target="_blank" rel="noopener">Erasmus Mundus Association</a>, Belgium</p>
+          <p>Connected alumni and current students for academic and career growth, and represented my program in monthly cross-program meetings to share practices and collaborate.</p>
+          <div class="chips"><span>Alumni relations</span><span>Representation</span><span>Community building</span></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2022 – 2023</div>
+        <div class="tl-card">
+          <h3>Content Writer &amp; Volunteer</h3>
+          <p class="tl-meta"><a href="https://alkhidmat.org/" target="_blank" rel="noopener">Alkhidmat Foundation</a>, Pakistan</p>
+          <p>Led the content-writing team during the 2022 Pakistan floods, driving fundraising, awareness campaigns, and relief drives — and was recognised as "Most Active Participant" in the volunteer training course.</p>
+          <div class="chips"><span>Content writing</span><span>Fundraising</span><span>Disaster relief</span></div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2021</div>
+        <div class="tl-card">
+          <h3>Ambassador &amp; Honorary Intern</h3>
+          <p class="tl-meta"><a href="https://www.amalacademy.org/amal-career-prep-fellowship" target="_blank" rel="noopener">Amal Academy</a> (Stanford-funded)</p>
+          <p>Led university outreach and marketing as a fellowship ambassador, earning an "Honorary Intern" recognition for the effort.</p>
+          <div class="chips"><span>Outreach</span><span>Marketing</span><span>Leadership</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="padding:34px 0 10px"></div>
+  </div>
+</main>
+
+<!-- ============ BLOG VIEW ============ -->
+<main id="blog" class="view">
+  <div class="wrap">
+    <div class="hero" style="padding-bottom:30px">
+      <p class="eyebrow">The writing</p>
+      <h1 style="font-size:clamp(2rem,5vw,3.1rem)">Essays &amp; arguments</h1>
+      <span class="underline"></span>
+      <p class="blog-intro">Thinking out loud across four threads — professional growth, science, society, and the inner life. Filter by what interests you, and tap any piece to preview it.</p>
+    </div>
+    <div class="filters" id="filters"><!-- injected by JS --></div>
+    <div class="posts" id="postGrid"><!-- injected by JS --></div>
+    <div style="padding:54px 0 10px"></div>
+  </div>
+</main>
+
+<!-- ============ MODAL ============ -->
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal">
+    <div class="top-rule"></div>
+    <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+    <div class="modal-body">
+      <div class="meta" id="modalMeta"></div>
+      <h2 id="modalTitle"></h2>
+      <div id="modalText"></div>
+      <div class="modal-actions" id="modalActions"></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap foot">
+    <span>© <span id="yr"></span> Fareeda Kalsoom</span>
+    <span class="quote">"How much of life is lived without thinking?"</span>
+  </div>
+</footer>
+
+<script>
+const cats={all:'All',science:'Science',professional:'Professional Development',feminism:'Social Issues',mind:'Psychology & Philosophy'};
+const posts = [
+  {
+    title:"In Effective Communication — Nothing is Obvious",
+    date:"June 2026", cat:"professional", live:true,
+    url:"https://substack.com/@fareedakalsoom/p-201898858",
+    excerpt:"If someone claims they've mastered communication, I'll doubt they've understood it in the first place. The claim itself ignores what makes communication worthwhile — and what makes it difficult."
+  },
+  {
+    title:"Creativity in Science",
+    date:"Coming soon", cat:"science", live:false,
+    url:"https://substack.com/@fareedakalsoom/posts",
+    excerpt:"Why scientific creativity rarely grows in isolation — and what tends to happen at the edges, where disciplines meet and borrow from one another."
+  },
+  {
+    title:"Effective People Management",
+    date:"Coming soon", cat:"professional", live:false,
+    url:"https://substack.com/@fareedakalsoom/posts",
+    excerpt:"Managing people has less to do with authority than with clarity — communication, accountability, follow-up, and meeting people where they are."
+  },
+  {
+    title:"Human Potential Is Limitless — As It Is",
+    date:"Coming soon", cat:"mind", live:false,
+    url:"https://substack.com/@fareedakalsoom/posts",
+    excerpt:"We talk easily about human potential being limitless. The more honest question is what quietly caps it — the assumptions, environments, and habits of thought that keep us from the edge of what we could be."
+  }
+];
+
+let filter='all';
+const grid=document.getElementById('postGrid');
+const filterBar=document.getElementById('filters');
+Object.keys(cats).forEach(key=>{
+  const b=document.createElement('button');
+  b.className='filt'+(key==='all'?' active':'');
+  b.textContent=cats[key];
+  b.onclick=()=>{filter=key;document.querySelectorAll('.filt').forEach(f=>f.classList.toggle('active',f===b));renderPosts();};
+  filterBar.appendChild(b);
+});
+function renderPosts(){
+  grid.innerHTML='';
+  const shown=posts.filter(p=>filter==='all'||p.cat===filter);
+  if(!shown.length){grid.innerHTML='<p class="empty-note">No essays in this thread yet — coming soon.</p>';return;}
+  shown.forEach(p=>{
+    const i=posts.indexOf(p);
+    const slug=p.title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'').slice(0,24).replace(/-$/,'');
+    const b=document.createElement('button');
+    b.className='post';
+    b.onclick=()=>openModal(i);
+    b.innerHTML=`
+      <div class="winbar"><span class="dots"></span><span class="winfile">${slug}.md</span></div>
+      <div class="screen">
+        <div class="meta"><span class="tag ${p.cat}">${cats[p.cat]}</span><span>${p.date}</span></div>
+        <h3>${p.title}<span class="caret"></span></h3>
+        <p>${p.excerpt.slice(0,118)}…</p>
+        <span class="more">${p.live?'Read preview':'Preview'}</span>
+      </div>`;
+    grid.appendChild(b);
+  });
+}
+renderPosts();
+// if arriving via a link like index.html#blog, open the blog view
+if(location.hash==='#blog')showView('blog');
+
+let lastFocus=null;
+function openModal(i){
+  const p=posts[i];
+  lastFocus=document.activeElement;
+  document.getElementById('modalMeta').innerHTML=`<span class="tag ${p.cat}">${cats[p.cat]}</span><span>${p.date}</span>`;
+  document.getElementById('modalTitle').textContent=p.title;
+  document.getElementById('modalText').innerHTML=`<p>${p.excerpt}</p>`;
+  const act=document.getElementById('modalActions');
+  act.innerHTML = p.live
+    ? `<a class="btn btn-primary" href="${p.url}" target="_blank" rel="noopener">Read the full essay →</a>
+       <button class="btn btn-ghost" onclick="closeModal()">Close</button>`
+    : `<a class="btn btn-primary" href="${p.url}" target="_blank" rel="noopener">Follow on Substack →</a>
+       <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+       <span style="align-self:center;font-size:.85rem;color:var(--muted)">Publishing soon — check back shortly.</span>`;
+  const ov=document.getElementById('overlay');
+  ov.classList.add('open');
+  document.body.style.overflow='hidden';
+  ov.querySelector('.modal-close').focus();
+}
+function closeModal(){
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow='';
+  if(lastFocus) lastFocus.focus();
+}
+document.getElementById('overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+function showView(v){
+  document.querySelectorAll('.view').forEach(el=>el.classList.toggle('show',el.id===v));
+  document.querySelectorAll('.navlink').forEach(l=>l.classList.toggle('active',l.dataset.link===v));
+  window.scrollTo({top:0,behavior:'instant' in window?'instant':'auto'});
+}
+function scrollTo2(id){
+  // mark contact nav active when scrolling there
+  if(id==='contact'){document.querySelectorAll('.navlink').forEach(l=>l.classList.toggle('active',l.dataset.link==='contact'));}
+  setTimeout(()=>document.getElementById(id).scrollIntoView({behavior:'smooth'}),60);
+}
+
+// turn Education & Activities cards into terminal-style windows
+document.querySelectorAll('.tl-card').forEach(card=>{
+  if(card.querySelector('.winbar'))return;
+  const h3=card.querySelector('h3');
+  const slug=(h3?h3.textContent:'entry').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'').slice(0,24).replace(/-+$/,'')||'entry';
+  const bar=document.createElement('div');
+  bar.className='winbar';
+  bar.innerHTML='<span class="dots"></span><span class="winfile">'+slug+'.md</span>';
+  const screen=document.createElement('div');
+  screen.className='screen';
+  while(card.firstChild){screen.appendChild(card.firstChild);}
+  card.appendChild(bar);
+  card.appendChild(screen);
+});
+
+// skills database row/entry count
+(function(){
+  const card=document.querySelector('.skills-card');
+  const foot=document.getElementById('skillCount');
+  if(card&&foot){
+    const rows=card.querySelectorAll('.skill-row:not(.head)').length;
+    const entries=card.querySelectorAll('.skill-row:not(.head) .chips span').length;
+    foot.textContent='-- '+rows+' categories, '+entries+' entries returned';
+  }
+})();
+
+document.getElementById('yr').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
